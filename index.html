@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="vi">
 <head>
-   <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KCWVMPCP5T"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -82,6 +82,8 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
 .chart-box{position:relative;width:100%;height:340px}
 .chart-box.pulse{height:300px}
 .chart-box canvas{width:100%;height:100%;display:block}
+.sync{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#059669;background:#d1fae5;border-radius:999px;padding:5px 10px}
+.sync.off{color:#b45309;background:#fef3c7}
 </style>
 </head>
 <body>
@@ -174,6 +176,7 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
   <button class="btn ghost" id="pdfBtn">📄 Báo cáo PDF</button>
   <input type="file" id="jsonInput" accept=".json,application/json" class="hidden">
  </div>
+ <div class="note">Dữ liệu được lưu trên Supabase (đám mây) và đồng bộ tự động. <span class="sync" id="syncStatus">☁️ Đã kết nối</span></div>
 </section>
 </div>
 
@@ -199,14 +202,50 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
 <script>
 'use strict';
 window.addEventListener('error',e=>console.error('Lỗi app:',e.message));
-const K={p:'hsg_profile_v41',r:'hsg_readings_v41'};
+/* ===== Supabase config ===== */
+const SB_URL='https://ftlltzpxpmwrldglioyk.supabase.co';
+const SB_KEY='sb_publishable_rz07EnDUgWq1S9_hgxi6oA_AvfjvgA_';
+const K={p:'hsg_profile_v42',r:'hsg_readings_v42'};
 const TAGS={'before_med':'Trước thuốc','after_med':'Sau thuốc','exercise':'Tập luyện','meal':'Sau ăn','coffee':'Cà phê','alcohol':'Rượu/bia','stress':'Stress','poor_sleep':'Ngủ kém','morning':'Buổi sáng','evening':'Buổi tối'};
 const SYM={none:'Không',headache:'Đau đầu',dizzy:'Chóng mặt',faint:'Ngất/gần ngất',chest:'Đau ngực/khó thở',weak:'Yếu liệt/nói khó/nhìn mờ',nausea:'Buồn nôn/nôn',palpitation:'Tim đập nhanh/không đều'};
 let profile=JSON.parse(localStorage.getItem(K.p)||'null')||{name:'',gender:'male',age:null,weight:null,height:null,condition:'none',photo:null};
 let readings=JSON.parse(localStorage.getItem(K.r)||'[]');
 let chosenTags=[],rangeDays=7,filter='all',tagFilter='all',timeEdited=false;
 const $=id=>document.getElementById(id);
-function save(){try{localStorage.setItem(K.p,JSON.stringify(profile));localStorage.setItem(K.r,JSON.stringify(readings))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy xuất JSON và xoá bớt dữ liệu cũ.');console.error(e)}}
+/* ===== Supabase REST helpers ===== */
+async function sbRequest(method,path,body){
+ const res=await fetch(SB_URL+'/rest/v1/'+path,{
+  method:method,
+  headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=representation'},
+  body:body?JSON.stringify(body):undefined
+ });
+ if(!res.ok){const t=await res.text();throw new Error('Supabase '+res.status+': '+t)}
+ return res.status===204?null:res.json();
+}
+async function sbUpsertProfile(p){
+ const row={id:1,name:p.name||'',gender:p.gender||'male',age:p.age,weight:p.weight,height:p.height,condition:p.condition||'none',photo:p.photo||null};
+ return sbRequest('POST','profile?on_conflict=id',[row]);
+}
+async function sbUpsertReadings(rows){
+ if(!rows.length)return null;
+ return sbRequest('POST','readings?on_conflict=id',rows);
+}
+async function sbLoadAll(){
+ const p=await sbRequest('GET','profile?id=eq.1');
+ const r=await sbRequest('GET','readings?order=time.desc');
+ return{profile:p&&p[0]?p[0]:null,readings:r||[]};
+}
+function setSync(ok){
+ const el=$('syncStatus');if(!el)return;
+ el.className='sync'+(ok?'':' off');
+ el.textContent=ok?'☁️ Đã kết nối':'⚠️ Chưa kết nối';
+}
+/* ===== Local cache + cloud sync ===== */
+function saveLocal(){try{localStorage.setItem(K.p,JSON.stringify(profile));localStorage.setItem(K.r,JSON.stringify(readings))}catch(e){console.error(e)}}
+function save(){saveLocal();
+ // fire-and-forget cloud sync
+ sbUpsertProfile(profile).then(()=>sbUpsertReadings(readings)).then(()=>setSync(true)).catch(e=>{console.error('Sync lỗi:',e);setSync(false)});
+}
 window.addEventListener('beforeunload',save);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')save()});
 const rows=()=>readings;
@@ -238,7 +277,7 @@ const bmi=p=>p&&p.weight&&p.height?+(p.weight/((p.height/100)**2)).toFixed(1):nu
 const bmiT=v=>v==null?'Chưa đủ dữ liệu':v<18.5?'Gầy':v<23?'Bình thường':v<25?'Thừa cân':v<30?'Béo phì độ I':'Béo phì độ II+';
 const bmiC=v=>v==null?'normal':v<18.5?'low':v<23?'normal':v<25?'elevated':'stage2';
 
-/* ===== Biểu đồ tự vẽ (không cần Chart.js) ===== */
+/* ===== Biểu đồ tự vẽ ===== */
 function drawLineChart(canvasId,labels,series,opts){
  const cv=$(canvasId);if(!cv)return;
  const box=cv.parentElement;
@@ -419,7 +458,7 @@ document.querySelectorAll('#rangeTabs .tab').forEach(b=>b.onclick=()=>{document.
 document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.filter;renderHistory()});
 $('tagFilter').onchange=e=>{tagFilter=e.target.value;renderHistory()};
 function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type}));a.download=name;a.click()}
-function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:41,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
+function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:42,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
 $('jsonExportBtn').onclick=exportJSON;
 $('jsonImportBtn').onclick=()=>$('jsonInput').click();
 $('jsonInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o.profile||!o.readings)throw new Error('File không đúng định dạng.');if(!confirm('Nhập sẽ thay thế dữ liệu hiện có. Tiếp tục?'))return;profile=o.profile;readings=o.readings;save();renderTracking();alert('Đã nhập dữ liệu.')}catch(err){alert('Không thể nhập JSON: '+err.message)}};rd.readAsText(f)};
@@ -443,6 +482,16 @@ function tick(){if(!timeEdited)$('time').value=localNow()}
 $('time').addEventListener('input',()=>timeEdited=true);
 setInterval(tick,1000);tick();
 setInterval(()=>{if(!('Notification' in window)||Notification.permission!=='granted')return;const t=localStorage.getItem('rem_time');if(!t)return;const n=new Date(),x=new Date();const parts=t.split(':').map(Number);x.setHours(parts[0],parts[1],0,0);if(Math.abs(n-x)<60000&&!localStorage.getItem('not_'+n.toDateString())){localStorage.setItem('not_'+n.toDateString(),'1');new Notification('Nhắc đo huyết áp',{body:'Đã đến '+t})}},20000);
+/* ===== Khởi động: tải từ Supabase, fallback localStorage ===== */
+(async function init(){
+ try{
+  const data=await sbLoadAll();
+  if(data.profile&&data.profile.name){profile=data.profile}
+  if(data.readings&&data.readings.length){readings=data.readings}
+  saveLocal();setSync(true);
+ }catch(e){console.error('Không tải được từ Supabase:',e);setSync(false)}
+ renderTracking();
+})();
 switchTab('tracking');
 </script>
 </body>
