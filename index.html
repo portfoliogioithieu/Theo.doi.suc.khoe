@@ -1,19 +1,14 @@
 <!doctype html>
 <html lang="vi">
 <head>
-       <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KCWVMPCP5T"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KCWVMPCP5T');
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hồ sơ Sức khoẻ Gia đình</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hồ sơ Sức khoẻ">
+<link rel="apple-touch-icon" href="app-icon.png">
 <style>
 :root{--brand:#6366f1;--brand2:#8b5cf6;--accent:#ec4899;--ink:#0f172a;--muted:#64748b;--line:#e6eaf3;--bg:#f6f7fd;--r:22px;--shadow:0 18px 44px rgba(79,70,229,.10)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -201,6 +196,17 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
  </div>
  <div class="note">Dữ liệu được lưu trên Supabase (đám mây) và đồng bộ tự động. <span class="sync" id="syncStatus">☁️ Đã kết nối</span></div>
 </section>
+<section class="card">
+ <h2>📱 Thêm vào Màn hình chính (iPhone)</h2>
+ <p class="sub">Để mở app như một ứng dụng thật, không có thanh địa chỉ Safari.</p>
+ <ol style="margin:0;padding-left:20px">
+  <li>Mở file HTML này trong <b>Safari</b> trên iPhone.</li>
+  <li>Bấm nút <b>Chia sẻ</b> (hình vuông có mũi tên lên).</li>
+  <li>Cuộn xuống, chọn <b>“Thêm vào Màn hình chính”</b>.</li>
+  <li>Đặt tên (ví dụ <b>“BHXH Hưu”</b>) → bấm <b>Thêm</b>.</li>
+ </ol>
+ <div class="note">Icon sẽ xuất hiện trên màn hình chính; khi mở, app chạy toàn màn hình, không có thanh địa chỉ Safari.</div>
+</section>
 </div>
 </div>
 
@@ -229,7 +235,7 @@ window.addEventListener('error',e=>console.error('Lỗi app:',e.message));
 /* ===== Supabase config ===== */
 const SB_URL='https://ftlltzpxpmwrldglioyk.supabase.co';
 const SB_KEY='sb_publishable_rz07EnDUgWq1S9_hgxi6oA_AvfjvgA_';
-const K={p:'hsg_profile_v46',r:'hsg_readings_v46',s:'hsg_session_v46',rem:'hsg_remember_v46'};
+const K={p:'hsg_profile_v47',r:'hsg_readings_v47',s:'hsg_session_v47',rem:'hsg_remember_v47'};
 const TAGS={'before_med':'Trước thuốc','after_med':'Sau thuốc','exercise':'Tập luyện','meal':'Sau ăn','coffee':'Cà phê','alcohol':'Rượu/bia','stress':'Stress','poor_sleep':'Ngủ kém','morning':'Buổi sáng','evening':'Buổi tối'};
 const SYM={none:'Không',headache:'Đau đầu',dizzy:'Chóng mặt',faint:'Ngất/gần ngất',chest:'Đau ngực/khó thở',weak:'Yếu liệt/nói khó/nhìn mờ',nausea:'Buồn nôn/nôn',palpitation:'Tim đập nhanh/không đều'};
 let profile=JSON.parse(localStorage.getItem(K.p)||'null')||{name:'',gender:'male',age:null,weight:null,height:null,condition:'none',photo:null};
@@ -526,7 +532,7 @@ document.querySelectorAll('#rangeTabs .tab').forEach(b=>b.onclick=()=>{document.
 document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.filter;renderHistory()});
 $('tagFilter').onchange=e=>{tagFilter=e.target.value;renderHistory()};
 function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type}));a.download=name;a.click()}
-function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:46,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
+function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:47,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
 $('jsonExportBtn').onclick=exportJSON;
 $('jsonImportBtn').onclick=()=>$('jsonInput').click();
 $('jsonInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o.profile||!o.readings)throw new Error('File không đúng định dạng.');if(!confirm('Nhập sẽ thay thế dữ liệu hiện có. Tiếp tục?'))return;profile=o.profile;readings=o.readings;save();renderTracking();alert('Đã nhập dữ liệu.')}catch(err){alert('Không thể nhập JSON: '+err.message)}};rd.readAsText(f)};
