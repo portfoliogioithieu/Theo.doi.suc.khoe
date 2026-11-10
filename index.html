@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="vi">
 <head>
-   <!-- Google tag (gtag.js) -->
+     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KCWVMPCP5T"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -12,7 +12,7 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Theo dõi huyết áp</title>
+<title>Hồ sơ Sức khoẻ Gia đình</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--brand:#6366f1;--brand2:#8b5cf6;--accent:#ec4899;--ink:#0f172a;--muted:#64748b;--line:#e6eaf3;--bg:#f6f7fd;--r:22px;--shadow:0 18px 44px rgba(79,70,229,.10)}
@@ -87,6 +87,7 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
 .auth-tabs{display:flex;gap:8px;margin-bottom:14px}
 .remember{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:4px 0 12px}
 .remember input{width:auto;min-height:0;margin:0}
+.link{color:var(--brand);font-weight:700;cursor:pointer;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -115,6 +116,7 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
   <div class="remember"><input type="checkbox" id="rememberMe"> <span>Ghi nhớ email & mật khẩu để lần sau không cần nhập lại</span></div>
   <button class="btn" type="submit" id="authSubmit" style="width:100%">Đăng nhập</button>
  </form>
+ <div class="note" style="text-align:center"><span class="link" id="forgotLink">Quên mật khẩu?</span></div>
  <div id="authMsg" class="note"></div>
 </div>
 
@@ -227,7 +229,7 @@ window.addEventListener('error',e=>console.error('Lỗi app:',e.message));
 /* ===== Supabase config ===== */
 const SB_URL='https://ftlltzpxpmwrldglioyk.supabase.co';
 const SB_KEY='sb_publishable_rz07EnDUgWq1S9_hgxi6oA_AvfjvgA_';
-const K={p:'hsg_profile_v44',r:'hsg_readings_v44',s:'hsg_session_v44',rem:'hsg_remember_v44'};
+const K={p:'hsg_profile_v45',r:'hsg_readings_v45',s:'hsg_session_v45',rem:'hsg_remember_v45'};
 const TAGS={'before_med':'Trước thuốc','after_med':'Sau thuốc','exercise':'Tập luyện','meal':'Sau ăn','coffee':'Cà phê','alcohol':'Rượu/bia','stress':'Stress','poor_sleep':'Ngủ kém','morning':'Buổi sáng','evening':'Buổi tối'};
 const SYM={none:'Không',headache:'Đau đầu',dizzy:'Chóng mặt',faint:'Ngất/gần ngất',chest:'Đau ngực/khó thở',weak:'Yếu liệt/nói khó/nhìn mờ',nausea:'Buồn nôn/nôn',palpitation:'Tim đập nhanh/không đều'};
 let profile=JSON.parse(localStorage.getItem(K.p)||'null')||{name:'',gender:'male',age:null,weight:null,height:null,condition:'none',photo:null};
@@ -244,7 +246,7 @@ async function sbAuth(endpoint,body){
   body:JSON.stringify(body)
  });
  const data=await res.json();
- if(!res.ok)throw new Error(data.msg||data.error_description||('Lỗi '+res.status));
+ if(!res.ok)throw new Error(data.msg||data.error_description||data.error||('Lỗi '+res.status));
  return data;
 }
 async function sbLogin(email,pass){
@@ -255,8 +257,13 @@ async function sbLogin(email,pass){
 }
 async function sbSignup(email,pass){
  const d=await sbAuth('signup',{email:email,password:pass});
- if(d.session){session={access_token:d.session.access_token,refresh_token:d.session.refresh_token,user_id:d.user.id,email:d.user.email};localStorage.setItem(K.s,JSON.stringify(session))}
+ if(!d.session){throw new Error('EMAIL_EXISTS')}
+ session={access_token:d.session.access_token,refresh_token:d.session.refresh_token,user_id:d.user.id,email:d.user.email};
+ localStorage.setItem(K.s,JSON.stringify(session));
  return d;
+}
+async function sbRecover(email){
+ return sbAuth('recover',{email:email});
 }
 async function sbRefresh(){
  if(!session||!session.refresh_token)throw new Error('Chưa có session');
@@ -515,7 +522,7 @@ document.querySelectorAll('#rangeTabs .tab').forEach(b=>b.onclick=()=>{document.
 document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.filter;renderHistory()});
 $('tagFilter').onchange=e=>{tagFilter=e.target.value;renderHistory()};
 function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type}));a.download=name;a.click()}
-function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:44,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
+function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:45,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
 $('jsonExportBtn').onclick=exportJSON;
 $('jsonImportBtn').onclick=()=>$('jsonInput').click();
 $('jsonInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o.profile||!o.readings)throw new Error('File không đúng định dạng.');if(!confirm('Nhập sẽ thay thế dữ liệu hiện có. Tiếp tục?'))return;profile=o.profile;readings=o.readings;save();renderTracking();alert('Đã nhập dữ liệu.')}catch(err){alert('Không thể nhập JSON: '+err.message)}};rd.readAsText(f)};
@@ -539,7 +546,7 @@ function tick(){if(!timeEdited)$('time').value=localNow()}
 $('time').addEventListener('input',()=>timeEdited=true);
 setInterval(tick,1000);tick();
 setInterval(()=>{if(!('Notification' in window)||Notification.permission!=='granted')return;const t=localStorage.getItem('rem_time');if(!t)return;const n=new Date(),x=new Date();const parts=t.split(':').map(Number);x.setHours(parts[0],parts[1],0,0);if(Math.abs(n-x)<60000&&!localStorage.getItem('not_'+n.toDateString())){localStorage.setItem('not_'+n.toDateString(),'1');new Notification('Nhắc đo huyết áp',{body:'Đã đến '+t})}},20000);
-/* ===== Auth UI + Remember me ===== */
+/* ===== Auth UI + Remember me + Forgot password ===== */
 $('tabLogin').onclick=()=>{isSignup=false;$('tabLogin').classList.add('on');$('tabSignup').classList.remove('on');$('authSubmit').textContent='Đăng nhập'};
 $('tabSignup').onclick=()=>{isSignup=true;$('tabSignup').classList.add('on');$('tabLogin').classList.remove('on');$('authSubmit').textContent='Đăng ký'};
 $('authForm').onsubmit=async e=>{
@@ -550,10 +557,31 @@ $('authForm').onsubmit=async e=>{
  else{remember=null;localStorage.removeItem(K.rem)}
  $('authMsg').textContent='Đang xử lý...';
  try{
-  if(isSignup){await sbSignup(email,pass);$('authMsg').textContent='Đăng ký thành công. Kiểm tra email để xác nhận (nếu Supabase yêu cầu).'}
-  else{await sbLogin(email,pass);$('authMsg').textContent='Đăng nhập thành công.'}
-  await initAfterAuth();
- }catch(err){$('authMsg').textContent='Lỗi: '+err.message}
+  if(isSignup){
+   await sbSignup(email,pass);
+   $('authMsg').textContent='Đăng ký thành công.';
+   await initAfterAuth();
+  }else{
+   await sbLogin(email,pass);
+   $('authMsg').textContent='Đăng nhập thành công.';
+   await initAfterAuth();
+  }
+ }catch(err){
+  const msg=err.message||'';
+  if(msg.includes('EMAIL_EXISTS')||msg.toLowerCase().includes('already registered')||msg.toLowerCase().includes('already been registered')){
+   $('authMsg').textContent='⚠️ Email này đã tồn tại. Hãy chọn "Đăng nhập" (không phải "Đăng ký").';
+  }else if(msg.toLowerCase().includes('invalid login credentials')||msg.toLowerCase().includes('invalid')){
+   $('authMsg').textContent='⚠️ Email hoặc mật khẩu không đúng.';
+  }else{
+   $('authMsg').textContent='Lỗi: '+msg;
+  }
+ }
+};
+$('forgotLink').onclick=async()=>{
+ const email=$('authEmail').value.trim();
+ if(!email)return alert('Hãy nhập email trước.');
+ try{await sbRecover(email);$('authMsg').textContent='Đã gửi email đặt lại mật khẩu. Kiểm tra hộp thư (cả Spam).'}
+ catch(err){$('authMsg').textContent='Lỗi: '+err.message}
 };
 $('logoutBtn').onclick=()=>{if(confirm('Đăng xuất?'))sbLogout()};
 function showApp(){$('authGate').classList.add('hidden');$('appBody').classList.remove('hidden')}
@@ -562,6 +590,7 @@ function showAuth(){
  if(remember){$('authEmail').value=remember.email||'';$('authPass').value=remember.pass||'';$('rememberMe').checked=true}
 }
 async function initAfterAuth(){
+ if(!session)return showAuth();
  showApp();
  try{
   const data=await sbLoadAll();
