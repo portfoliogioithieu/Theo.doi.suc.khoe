@@ -522,7 +522,16 @@ function renderHistory(){
  data.forEach(r=>{const k=cls(r.sys,r.dia,r.symptom),h=hrCls(r.pulse),tr=document.createElement('tr');
   tr.innerHTML='<td>'+fmtDT(r.time)+'</td><td><b>'+r.sys+'/'+r.dia+'</b></td><td>'+(r.pulse?r.pulse+' <span class="badge '+h.c+'">'+h.t+'</span>':'—')+'</td><td>'+(r.tags&&r.tags.length?r.tags.map(x=>TAGS[x]).join(', '):'—')+'</td><td>'+SYM[r.symptom||'none']+'</td><td><span class="badge '+k.c+'">'+k.t+'</span></td><td>'+(r.note||'—')+'</td><td><button class="btn ghost sm" data-id="'+r.id+'">Xoá</button></td>';
   tb.appendChild(tr)});
- tb.querySelectorAll('button').forEach(b=>b.onclick=()=>{readings=readings.filter(r=>r.id!==b.dataset.id);save();renderTracking()});
+ tb.querySelectorAll('button').forEach(b=>b.onclick=async()=>{
+  const id=b.dataset.id;
+  if(!confirm('Xoá lần đo này?'))return;
+  try{
+    if(session)await sbRequest('DELETE','readings?id=eq.'+id+'&user_id=eq.'+session.user_id);
+  }catch(e){console.error('Lỗi xoá trên Supabase:',e);alert('Không xoá được trên Supabase: '+e.message);return}
+  readings=readings.filter(r=>r.id!==id);
+  saveLocal();
+  renderTracking();
+});
 }
 function renderTracking(){
  try{renderChips();renderProfileBar();renderAdvice();renderAnalytics();renderCharts();renderHistory();
