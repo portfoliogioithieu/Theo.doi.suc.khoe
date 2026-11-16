@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="vi">
 <head>
- <!-- Google tag (gtag.js) -->
+   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KCWVMPCP5T"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -12,7 +12,7 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Theo dõi huyết áp</title>
+<title>Hồ sơ Sức khoẻ Gia đình</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
 </head>
 <body>
 <header><div class="hi">
- <div class="brand"><div class="mark">🏥</div><div>Theo dõi huyết áp<small>Huyết áp • nhịp tim</small></div></div>
+ <div class="brand"><div class="mark">🏥</div><div>Hồ sơ Sức khoẻ<small>Huyết áp • nhịp tim</small></div></div>
  <div class="user">
   <div class="pfp" id="pfpBox" title="Nhấn để đổi ảnh">?</div>
   <input type="file" id="pfpInput" accept="image/*" class="hidden">
@@ -179,20 +179,19 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
  <div id="emptyBox" class="empty">Chưa có kết quả.</div>
 </section>
 <section class="card">
- <h2>Thang phân loại</h2>
+ <h2>Thang phân loại (Bộ Y tế)</h2>
  <div class="legend">
-  <div><span class="badge low">Huyết áp thấp</span><br>Dưới 90/60</div>
-  <div><span class="badge lowwarn">Thấp cần đánh giá</span><br>Dưới 80/50 hoặc kèm dấu hiệu nặng</div>
-  <div><span class="badge normal">Bình thường</span><br>Dưới 120/80</div>
-  <div><span class="badge elevated">Huyết áp cao</span><br>120–129 và dưới 80</div>
-  <div><span class="badge stage1">Tăng huyết áp độ 1</span><br>130–139 hoặc 80–89</div>
-  <div><span class="badge stage2">Tăng huyết áp độ 2</span><br>Từ 140/90</div>
-  <div><span class="badge crisis">Khủng hoảng</span><br>Từ 180/120</div>
-  <div><span class="badge hr-ok">Nhịp bình thường</span><br>60–100 bpm</div>
-  <div><span class="badge hr-low">Nhịp chậm</span><br>Dưới 60 bpm</div>
-  <div><span class="badge hr-fast">Nhịp hơi nhanh</span><br>101–120 bpm</div>
-  <div><span class="badge hr-alert">Nhịp nhanh</span><br>Trên 120 bpm</div>
+  <div><span class="badge normal">Huyết áp tối ưu</span><br>&lt; 120 và &lt; 80</div>
+  <div><span class="badge normal">Huyết áp bình thường</span><br>120–129 và 80–84</div>
+  <div><span class="badge elevated">Tiền tăng huyết áp</span><br>130–139 và/hoặc 85–89</div>
+  <div><span class="badge stage1">THA độ 1</span><br>140–159 và/hoặc 90–99</div>
+  <div><span class="badge stage2">THA độ 2</span><br>160–179 và/hoặc 100–109</div>
+  <div><span class="badge crisis">THA độ 3</span><br>≥ 180 và/hoặc ≥ 110</div>
+  <div><span class="badge stage1">THA tâm thu đơn độc</span><br>≥ 140 và &lt; 90</div>
+  <div><span class="badge low">Huyết áp thấp</span><br>&lt; 90/60</div>
+  <div><span class="badge lowwarn">Thấp cần đánh giá</span><br>&lt; 80/50 hoặc kèm dấu hiệu nặng</div>
  </div>
+ <div class="note">Phân độ theo Hướng dẫn chẩn đoán và điều trị tăng huyết áp, Quyết định 3192/QĐ-BYT. Nếu tâm thu và tâm trương rơi vào 2 mức khác nhau, lấy mức cao hơn.</div>
 </section>
 <section class="card">
  <h2>Sao lưu, phục hồi & báo cáo</h2>
@@ -212,7 +211,7 @@ td{padding:11px 8px;border-bottom:1px solid #f1f4fa;white-space:nowrap}
   <li>Mở file HTML này trong <b>Safari</b> trên iPhone.</li>
   <li>Bấm nút <b>Chia sẻ</b> (hình vuông có mũi tên lên).</li>
   <li>Cuộn xuống, chọn <b>“Thêm vào Màn hình chính”</b>.</li>
-  <li>Đặt tên (ví dụ <b>“Huyết áp”</b>) → bấm <b>Thêm</b>.</li>
+  <li>Đặt tên (ví dụ <b>“BHXH Hưu”</b>) → bấm <b>Thêm</b>.</li>
  </ol>
  <div class="note">Icon sẽ xuất hiện trên màn hình chính; khi mở, app chạy toàn màn hình, không có thanh địa chỉ Safari.</div>
 </section>
@@ -244,7 +243,7 @@ window.addEventListener('error',e=>console.error('Lỗi app:',e.message));
 /* ===== Supabase config ===== */
 const SB_URL='https://ftlltzpxpmwrldglioyk.supabase.co';
 const SB_KEY='sb_publishable_rz07EnDUgWq1S9_hgxi6oA_AvfjvgA_';
-const K={p:'hsg_profile_v47',r:'hsg_readings_v47',s:'hsg_session_v47',rem:'hsg_remember_v47'};
+const K={p:'hsg_profile_v48',r:'hsg_readings_v48',s:'hsg_session_v48',rem:'hsg_remember_v48'};
 const TAGS={'before_med':'Trước thuốc','after_med':'Sau thuốc','exercise':'Tập luyện','meal':'Sau ăn','coffee':'Cà phê','alcohol':'Rượu/bia','stress':'Stress','poor_sleep':'Ngủ kém','morning':'Buổi sáng','evening':'Buổi tối'};
 const SYM={none:'Không',headache:'Đau đầu',dizzy:'Chóng mặt',faint:'Ngất/gần ngất',chest:'Đau ngực/khó thở',weak:'Yếu liệt/nói khó/nhìn mờ',nausea:'Buồn nôn/nôn',palpitation:'Tim đập nhanh/không đều'};
 let profile=JSON.parse(localStorage.getItem(K.p)||'null')||{name:'',gender:'male',age:null,weight:null,height:null,condition:'none',photo:null};
@@ -309,6 +308,9 @@ async function sbUpsertReadings(rows){
  const payload=rows.map(r=>({id:r.id,user_id:session.user_id,time:r.time,sys:r.sys,dia:r.dia,pulse:r.pulse,arm:r.arm,symptom:r.symptom,tags:r.tags||[],note:r.note||''}));
  return sbRequest('POST','readings?on_conflict=id',payload);
 }
+async function sbDeleteReading(id){
+ return sbRequest('DELETE','readings?id=eq.'+id+'&user_id=eq.'+session.user_id);
+}
 async function sbLoadAll(){
  const p=await sbRequest('GET','profile?user_id=eq.'+session.user_id);
  const r=await sbRequest('GET','readings?user_id=eq.'+session.user_id+'&order=time.desc');
@@ -338,14 +340,18 @@ const newId=()=>Date.now()+'-'+Math.random().toString(36).slice(2,9);
 const localNow=()=>new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
 const fmtDT=d=>new Date(d).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
 
+/* ===== Phân loại huyết áp theo Bộ Y tế (QĐ 3192/QĐ-BYT) ===== */
 function cls(s,d,x='none'){
+ // Huyết áp thấp (ngoài bảng BYT, giữ để cảnh báo an toàn)
  if(s<80||d<50||((s<90||d<60)&&['faint','chest','weak'].includes(x)))return{t:'Huyết áp thấp cần đánh giá',c:'lowwarn',g:'low'};
  if(s<90||d<60)return{t:'Huyết áp thấp',c:'low',g:'low'};
- if(s>=180||d>=120)return{t:'Khủng hoảng huyết áp',c:'crisis',g:'high'};
- if(s>=140||d>=90)return{t:'Tăng huyết áp độ 2',c:'stage2',g:'high'};
- if(s>=130||d>=80)return{t:'Tăng huyết áp độ 1',c:'stage1',g:'high'};
- if(s>=120)return{t:'Huyết áp cao',c:'elevated',g:'high'};
- return{t:'Bình thường',c:'normal',g:'normal'};
+ // Phân độ theo Bộ Y tế
+ if(s>=180||d>=110)return{t:'THA độ 3',c:'crisis',g:'high'};
+ if(s>=160||d>=100)return{t:'THA độ 2',c:'stage2',g:'high'};
+ if(s>=140||d>=90)return{t:'THA độ 1'+(d<90?' (tâm thu đơn độc)':''),c:'stage1',g:'high'};
+ if(s>=130||d>=85)return{t:'Tiền tăng huyết áp',c:'elevated',g:'watch'};
+ if(s<120&&d<80)return{t:'Huyết áp tối ưu',c:'normal',g:'normal'};
+ return{t:'Huyết áp bình thường',c:'normal',g:'normal'};
 }
 function hrCls(p){
  if(p==null)return{t:'Chưa có nhịp tim',c:'normal',g:'none'};
@@ -399,10 +405,12 @@ function renderCharts(){
   {label:'Tâm thu',data:data.map(r=>r.sys),color:'#ef4444'},
   {label:'Tâm trương',data:data.map(r=>r.dia),color:'#6366f1'}
  ],{yMin:40,yMax:200,zones:[
-  {lo:40,hi:90,c:'rgba(59,130,246,.10)'},
-  {lo:90,hi:120,c:'rgba(16,185,129,.10)'},
-  {lo:120,hi:160,c:'rgba(245,158,11,.10)'},
-  {lo:160,hi:200,c:'rgba(239,68,68,.12)'}
+  {lo:40,hi:120,c:'rgba(16,185,129,.10)'},
+  {lo:120,hi:130,c:'rgba(16,185,129,.18)'},
+  {lo:130,hi:140,c:'rgba(245,158,11,.12)'},
+  {lo:140,hi:160,c:'rgba(249,115,22,.12)'},
+  {lo:160,hi:180,c:'rgba(239,68,68,.14)'},
+  {lo:180,hi:200,c:'rgba(153,27,27,.18)'}
  ]});
  drawLineChart('pulseCanvas',labels,[
   {label:'Nhịp tim',data:data.map(r=>r.pulse),color:'#ec4899'}
@@ -462,7 +470,7 @@ function renderProfileBar(){
 }
 function advice(r,p){
  const s=r.sys,d=r.dia,x=r.symptom||'none',hr=r.pulse,hc=hrCls(hr),em=[],ad=[];
- if(s>=180||d>=120)em.push('Huyết áp từ 180/120 mmHg trở lên: cần đánh giá y tế khẩn cấp.');
+ if(s>=180||d>=110)em.push('THA độ 3 (≥180/≥110): cần đánh giá y tế khẩn cấp.');
  if(x==='chest'||x==='weak')em.push('Đau ngực/khó thở hoặc yếu liệt, nói khó, nhìn mờ: gọi cấp cứu ngay.');
  if(x==='faint')em.push('Ngất hoặc gần ngất: cần đánh giá y tế sớm.');
  if(hc.g==='alert')em.push('Nhịp tim '+hr+' bpm ('+hc.t.toLowerCase()+') cần được đánh giá y tế.');
@@ -477,7 +485,7 @@ function advice(r,p){
  if(x==='palpitation')ad.push('Ngồi nghỉ, hít thở chậm; tránh cà phê, rượu bia. Nếu nhanh kéo dài, kèm đau ngực, khó thở hoặc ngất: cấp cứu.');
  if(x==='none')ad.push('Không có triệu chứng: tiếp tục theo dõi; trao đổi bác sĩ nếu bất thường lặp lại.');
  if(s<90||d<60)ad.push('Huyết áp thấp: nghỉ, uống nước, đứng dậy chậm; không tự ngưng thuốc.');
- if(s>=130&&x==='none')ad.push('Huyết áp cao: nghỉ 5 phút rồi đo lại; nếu vẫn cao, đặt lịch khám.');
+ if(s>=140&&x==='none')ad.push('Huyết áp cao (THA độ 1 trở lên): nghỉ 5 phút rồi đo lại; nếu vẫn cao, đặt lịch khám.');
  if(hr!=null&&hr<60&&hc.g!=='alert')ad.push('Nhịp chậm có thể bình thường ở người tập luyện nhiều hoặc khi ngủ; khám nếu mới xuất hiện, kèm chóng mặt/ngất.');
  if(hr!=null&&hr>100&&hc.g!=='alert')ad.push('Nhịp nhanh có thể do stress, cà phê, sốt hoặc vận động; nghỉ và đo lại sau 5–10 phút.');
  return{em,ad};
@@ -526,12 +534,12 @@ function renderHistory(){
   const id=b.dataset.id;
   if(!confirm('Xoá lần đo này?'))return;
   try{
-    if(session)await sbRequest('DELETE','readings?id=eq.'+id+'&user_id=eq.'+session.user_id);
+   if(session)await sbDeleteReading(id);
   }catch(e){console.error('Lỗi xoá trên Supabase:',e);alert('Không xoá được trên Supabase: '+e.message);return}
   readings=readings.filter(r=>r.id!==id);
   saveLocal();
   renderTracking();
-});
+ });
 }
 function renderTracking(){
  try{renderChips();renderProfileBar();renderAdvice();renderAnalytics();renderCharts();renderHistory();
@@ -550,7 +558,7 @@ document.querySelectorAll('#rangeTabs .tab').forEach(b=>b.onclick=()=>{document.
 document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tab-tracking .tab[data-filter]').forEach(x=>x.classList.remove('on'));b.classList.add('on');filter=b.dataset.filter;renderHistory()});
 $('tagFilter').onchange=e=>{tagFilter=e.target.value;renderHistory()};
 function download(name,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type}));a.download=name;a.click()}
-function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:47,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
+function exportJSON(){download('ho-so-suc-khoe-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:48,exportedAt:new Date().toISOString(),profile:profile,readings:readings},null,2),'application/json')}
 $('jsonExportBtn').onclick=exportJSON;
 $('jsonImportBtn').onclick=()=>$('jsonInput').click();
 $('jsonInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o.profile||!o.readings)throw new Error('File không đúng định dạng.');if(!confirm('Nhập sẽ thay thế dữ liệu hiện có. Tiếp tục?'))return;profile=o.profile;readings=o.readings;save();renderTracking();alert('Đã nhập dữ liệu.')}catch(err){alert('Không thể nhập JSON: '+err.message)}};rd.readAsText(f)};
@@ -560,7 +568,7 @@ function exportPDF(){
  const recent=data.slice(0,7);
  const rowsHtml=data.slice(0,50).map(r=>{const k=cls(r.sys,r.dia,r.symptom),h=hrCls(r.pulse);return '<tr><td>'+fmtDT(r.time)+'</td><td>'+r.sys+'/'+r.dia+'</td><td>'+(r.pulse||'—')+'</td><td>'+h.t+'</td><td>'+k.t+'</td><td>'+(r.tags&&r.tags.length?r.tags.map(x=>TAGS[x]).join(', '):'—')+'</td><td>'+(r.note||'')+'</td></tr>'}).join('');
  const w=window.open('','_blank');
- w.document.write('<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Báo cáo sức khoẻ - '+(profile.name||'')+'</title><style>body{font-family:Arial;color:#111;padding:26px}h1{margin:0 0 4px;font-size:22px}h2{font-size:16px;margin:20px 0 8px;border-bottom:2px solid #4f46e5;padding-bottom:5px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:6px;text-align:left}th{background:#eef2ff}.meta{color:#555;font-size:13px}.box{background:#f5f7ff;border-left:4px solid #4f46e5;padding:10px;margin:8px 0;font-size:13px}@media print{button{display:none}}</style></head><body><h1>Báo cáo sức khoẻ</h1><div class="meta">Hồ sơ: <b>'+(profile.name||'')+'</b> • '+(profile.age||'')+' tuổi • '+({male:'Nam',female:'Nữ',other:'Khác'})[profile.gender||'male']+' • BMI '+(bmi(profile)??'—')+'<br>Bệnh nền: '+({none:'Không',pregnant:'Đang mang thai',kidney:'Bệnh thận',diabetes:'Đái tháo đường',heart:'Bệnh tim mạch'})[profile.condition||'none']+' • Xuất ngày '+new Date().toLocaleString('vi-VN')+'</div><h2>Tóm tắt 7 lần đo gần nhất</h2><div class="box">Huyết áp trung bình: <b>'+(avg(recent,'sys')??'—')+'/'+(avg(recent,'dia')??'—')+' mmHg</b> • Nhịp tim trung bình: <b>'+(avg(recent,'pulse')??'—')+' bpm</b></div><h2>Lịch sử 50 lần đo gần nhất</h2><table><thead><tr><th>Thời gian</th><th>Huyết áp</th><th>Nhịp tim</th><th>Phân loại nhịp</th><th>Phân loại HA</th><th>Bối cảnh</th><th>Ghi chú</th></tr></thead><tbody>'+rowsHtml+'</tbody></table><p class="note">Báo cáo chỉ tổng hợp dữ liệu tự theo dõi; không thay thế chẩn đoán và quyết định điều trị của bác sĩ.</p><button onclick="window.print()" style="padding:10px 16px;border:0;border-radius:8px;background:#4f46e5;color:#fff;font-weight:700;cursor:pointer">In / Lưu PDF</button></body></html>');
+ w.document.write('<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Báo cáo sức khoẻ - '+(profile.name||'')+'</title><style>body{font-family:Arial;color:#111;padding:26px}h1{margin:0 0 4px;font-size:22px}h2{font-size:16px;margin:20px 0 8px;border-bottom:2px solid #4f46e5;padding-bottom:5px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #ddd;padding:6px;text-align:left}th{background:#eef2ff}.meta{color:#555;font-size:13px}.box{background:#f5f7ff;border-left:4px solid #4f46e5;padding:10px;margin:8px 0;font-size:13px}@media print{button{display:none}}</style></head><body><h1>Báo cáo sức khoẻ</h1><div class="meta">Hồ sơ: <b>'+(profile.name||'')+'</b> • '+(profile.age||'')+' tuổi • '+({male:'Nam',female:'Nữ',other:'Khác'})[profile.gender||'male']+' • BMI '+(bmi(profile)??'—')+'<br>Bệnh nền: '+({none:'Không',pregnant:'Đang mang thai',kidney:'Bệnh thận',diabetes:'Đái tháo đường',heart:'Bệnh tim mạch'})[profile.condition||'none']+' • Xuất ngày '+new Date().toLocaleString('vi-VN')+'</div><h2>Tóm tắt 7 lần đo gần nhất</h2><div class="box">Huyết áp trung bình: <b>'+(avg(recent,'sys')??'—')+'/'+(avg(recent,'dia')??'—')+' mmHg</b> • Nhịp tim trung bình: <b>'+(avg(recent,'pulse')??'—')+' bpm</b></div><h2>Lịch sử 50 lần đo gần nhất</h2><table><thead><tr><th>Thời gian</th><th>Huyết áp</th><th>Nhịp tim</th><th>Phân loại nhịp</th><th>Phân loại HA (BYT)</th><th>Bối cảnh</th><th>Ghi chú</th></tr></thead><tbody>'+rowsHtml+'</tbody></table><p class="note">Báo cáo chỉ tổng hợp dữ liệu tự theo dõi; không thay thế chẩn đoán và quyết định điều trị của bác sĩ.</p><button onclick="window.print()" style="padding:10px 16px;border:0;border-radius:8px;background:#4f46e5;color:#fff;font-weight:700;cursor:pointer">In / Lưu PDF</button></body></html>');
  w.document.close();
 }
 $('pdfBtn').onclick=exportPDF;
